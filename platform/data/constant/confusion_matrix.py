@@ -1,3 +1,13 @@
 ACCURACY = 'accuracy'
 RECALL = 'recall'
 PRECISION = 'precision'
+TRUE_POSITIVE='true positive'
+TRUE_NEGATIVE='true negative'
+FALSE_POSITIVE="false positive"
+FALSE_NEGATIVE="false negative"
+SENSITIVITY_AT_SPECIFICITY="sensitivity at specificity"
+SPECIFICITY_AT_SENSITIVITY="specificity at sensitivity"
+CROSS_ENTROPY_ERROR="cross entropy error"
+MEAN_SQUARED_ERROR="mean squared error"
+MEAN_ABSOLUTE_ERROR="mean absolute error"
+TRIPLET_ERROR="triplet error"

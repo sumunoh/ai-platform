@@ -1,0 +1,2 @@
+MIN='min'
+MAX='max'

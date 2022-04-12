@@ -1,2 +1,3 @@
-CONSTANT = 'constant'
-MULTIPLY = 'multiply'
+CONSTANT = 'Constant'
+MULTIPLY = 'Multiply'
+EXPOTENTIAL = 'Expotential'
