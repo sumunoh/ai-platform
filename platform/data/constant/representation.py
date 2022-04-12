@@ -1,0 +1,6 @@
+MIN='min'
+MAX='max'
+AVERAGE='average'
+MEDIAN='median'
+MAX_AVERAGE_STANDARD='max average standard'
+MIN_AVERAGE_STANDARD='min average standard'

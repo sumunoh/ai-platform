@@ -14,14 +14,12 @@ class LearningSchedule(metaclass=ABCMeta):
     def __iter__(self):
         yield 'schedule type', self._tpye
 
-
 class ConstantSchedule(LearningSchedule):
     def __init__(self) -> None:
         super().__init__(_schedule.CONSTANT)
 
-
 class MulytiplySchedule(LearningSchedule):
-    def __init__(self, multi: float) -> None:
+    def __init__(self, multi: float = 0.1) -> None:
         super().__init__(_schedule.MULTIPLY)
         self._multi = multi
 
@@ -33,3 +31,14 @@ class MulytiplySchedule(LearningSchedule):
         for p in super(MulytiplySchedule, self).__iter__():
             yield p 
         yield 'multi', self._multi
+
+class ExpotentialSchedule(LearningSchedule):
+    def __init__(self, x:float) -> None:
+        super().__init__(_schedule.EXPOTENTIAL)
+        self._Expotential = x
+        
+    def __iter__(self):
+        for p in super(ExpotentialSchedule, self).__iter__():
+            yield p
+        yield 'x', self._Expotential
+        
