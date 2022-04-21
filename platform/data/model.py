@@ -1,8 +1,10 @@
-class Model:
+import paramvalidation
+from layer import InputLayer, OutputLayer
+class Model():
     # path
     # layer 추가필요
-    def __init__(self,input_layer, output_layer, path_model_save, name, initializer='random normal',gpu=True):
-        
+    def __init__(self,input_layer:InputLayer, output_layer:OutputLayer, path_model_save:str, name:str, initializer:str='random normal',gpu:bool=True):
+
         self.input_layer=input_layer
         self.output_layer=output_layer
         # self.path=path
@@ -11,7 +13,14 @@ class Model:
         self.name = name
         self.initializer =initializer
         self.gpu = gpu
-    
+
+        param_info = list(self.__init__.__annotations__.items())[:-1]
+        except_params = ['input_layer', 'output_layer']
+        for param_name, param_type in param_info:
+            if not param_name in except_params:
+                param_value=getattr(self, param_name)
+                paramvalidation.validate_type(param_name, param_type, param_value)
+
     def __iter__(self):
         yield 'input layer', dict(self.input_layer)
         yield 'output layer', dict(self.output_layer) 
@@ -23,22 +32,7 @@ class Model:
         yield 'gpu', self.gpu        
         
         
-class InputLayer:
-    def __init__(self, size):
-        self.size = size
-        
-    def __iter__(self):
-        yield 'size', self.size
-    
-    
-class OutputLayer:
-    def __init__(self, size, activation = 'sigmoid'):
-        self.size = size
-        self.activate = activation
-        
-    def __iter__(self):
-        yield 'size', self.size
-        yield 'activate', self.activate
+
         
         
 # class NetPath(Model):

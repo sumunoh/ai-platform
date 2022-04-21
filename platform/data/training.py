@@ -3,7 +3,7 @@ from constant import optimizer as _optimizer
 from constant import loss as _loss
 from constant import confusion_matrix as _confusion_matrix
 import earlystop as _earlystop
-
+import paramvalidation
 
 class Training:
     def __init__(self,  optimizer : str = _optimizer.ADAM, 
@@ -21,7 +21,17 @@ class Training:
         self.early_stop = early_stop
         self.learning_rate_schedule=learning_rate_schedule
         self.metrics = metrics
+
+
         
+        param_hint = list(self.__init__.__annotations__.items())[:-1]
+        except_params=['early_stop', 'learning_rate_schedule']
+
+        for param_name, param_type in param_hint:
+            if not param_name in except_params:
+               param_value=getattr(self, param_name)
+               paramvalidation.validate_type(param_name, param_type, param_value)
+
     def __iter__(self):
         
         yield 'optimizer', self.optimizer

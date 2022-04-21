@@ -12,36 +12,35 @@ def dict_to_output_layer(data: dict):
     return OutputLayer(data['size'], data['activation'])
 
 def dict_to_model(data: dict):
+    param_dict = {"input layer":"input_layer",
+                  "output layer":"output_layer",
+                  "path" :"fold_size",
+                  "layer":"fold_num",
+                  "path model save":"path_model_save",
+                  "initializer":"initializer",
+                  "name":"name",
+                  "gpu":"gpu"}
     
-    input_layer = dict_to_input_layer(data['input layer'])
-    output_layer = dict_to_output_layer(data['output layer'])
-    initializer = data['initializer']
-    save_path=data['path model save']
-    name = data['name']
-    gpu=data['gpu']
+    rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
     
-    return Model(input_layer=input_layer,
-                 output_layer=output_layer,
-                 initializer=initializer,
-                 path_model_save=save_path,
-                 name=name,
-                 gpu=gpu
-                 )
+    rekey_data['input_layer'] = dict(dict_to_input_layer(rekey_data['input_layer']))
+    
+    rekey_data['output_layer'] = dict(dict_to_output_layer(rekey_data['output_layer']))
+    
+    return Model(**rekey_data)
     
 def dict_to_dataset(data: dict):
-    
-    dataset_type = data['dataset_type']
-    path_dataset = data['path_dataset']
-    fold_size = data['fold size']
-    fold_number = data['fold number']
-    num_worker = data['num_worker']
-    random_seed = data['random_seed']
-    
-    return Dataset(dataset_type=dataset_type,
-                path_dataset=path_dataset,
-                num_worker=num_worker,
-                random_seed=random_seed,
-                fold_size=fold_size, fold_num=fold_number)
+    #ok
+    param_dict = {"dataset type":"dataset_type",
+                  "path dataset":"path_dataset",
+                  "fold size" :"fold_size",
+                  "num worker":"num_worker",
+                  "fold number":"fold_number",
+                  "random seed":"random_seed"}
+
+    rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
+
+    return Dataset(**rekey_data)
 
 def dict_to_earlystop(data:dict):
     return MinMaxStop(data['mode'],data['monitor'],data['min delta'],data['patience'])
@@ -62,30 +61,24 @@ def dict_to_learningrate_schedule(data:dict):
     else :
         return _schedule_method(data['multi'])
 
-def dict_to_train(data:dict):
+def dict_to_training(data:dict):
+    param_dict = {"optimizer":"optimizer",
+                  "loss":"loss",
+                  "batch size" :"batch_size",
+                  "learning rate":"learning_rate",
+                  "max epoch":"max_epoch",
+                  "early stop":"early_stop",
+                  "learning rate schedule":"learning_rate_schedule",
+                  "metrics":"metrics"}
+
+    rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
+    rekey_data['early_stop']=dict(dict_to_earlystop(data['early stop']))
+    rekey_data['learning_rate_schedule']= dict(dict_to_learningrate_schedule(data['learning rate schedule']))
     
-    optimizer = data['optimizer']
-    loss=data['loss']
-    batch_size = data['batch size']
-    learning_rate=data['learning rate']
-    max_epoch = data['max epoch']
-    early_stop=dict_to_earlystop(data['early stop'])
-    learning_rate_schedule= dict_to_learningrate_schedule(data['learning rate schedule'])
-    metrics = data['metrics']
-    
-    return Training(
-        optimizer=optimizer,
-        loss=loss,
-        batch_size=batch_size,
-        learning_rate=learning_rate,
-        max_epoch=max_epoch,
-        early_stop=early_stop,
-        learning_rate_schedule=learning_rate_schedule,
-        metrics=metrics
-    )
+    return Training(**rekey_data)
     
 def dict_to_metadata(data:dict):
-    return Metadata(model=dict_to_model(data),
-                     dataset=dict_to_dataset(data),
-                     training=dict_to_train(data))
+    return Metadata(model=dict_to_model(data['model']),
+                     dataset=dict_to_dataset(data['dataset']),
+                     training=dict_to_training(data['training']))
     
