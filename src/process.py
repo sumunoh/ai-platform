@@ -1,7 +1,10 @@
-import loss
-from dataset import Dataset
-from torch.utils.data import DataLoader
+from tabnanny import check
+from src import loss
+from src import dataset
+from torch.utils import data
 import torch
+import os
+from torch.utils.tensorboard import SummaryWriter
 
 class TrainProcess:
     def __init__(self) -> None:
@@ -10,56 +13,75 @@ class TrainProcess:
     def _setup(self):
         # 학습 하기 전 환경 설정
         # 쿠다, 데이터 저장 폴더, 로그 폴더 등...
-        pass
+        self.train_loader: data.DataLoader = None
+        self.valid_loader: data.DataLoader = None
+        self.train_summary: SummaryWriter = None
+        self.valid_summary: SummaryWriter = None
+        self.model: torch.nn.Module = None
+        self.optimizer: torch.optim.Optimizer = None
+        self.loss: loss.Loss = None
+        self.checkpoint: str = None
 
-    def _build_dataset(self):
-        # hdf5 파일을 읽는 데이터 로드 생성, train, valid, test에 대해서 하나씩
-        dataset = Dataset('path', 0, 'train')
-        dataloader = DataLoader(
-            dataset,
-            batch_size=8,
-            shuffle=True,
-            num_workers=1,
-            pin_memory=True,
-            drop_last=True)
-        pass
+    def _forward_model(self, input, target):
+        output = self.model(input)
+        loss = self.loss.update(output, target)
+        return loss
 
-    def _build_model(self, device: torch.device):
-        # 메타데이터에 따라 model, optimizer, scheduler 생성
-        model = None
+    def _train_model(self):
+        self.model.train()
 
-        optimizer = torch.optim.SGD(model.parameters(), 0.001)
+        for input, target in self.train_loader:
+            loss = self._forward_model(input, target)
 
-        scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, 10, 0.99)
+            loss.backward()
+            self.optimizer.step()
+        
+        return self.loss.result()
 
-        return model, optimizer, scheduler
+    def _valid_model(self):
+        self.model.eval()
 
-    def _train_model(train_loader, model, loss: loss.Loss, optimizer, scheduler, device):
-        # 학습 진행
-        model.train()
+        for input, target in self.valid_loader:
+            loss = self._forward_model(input, target)
 
-        for epoch in range(100):
-            loss.reset()
-            for input, target in train_loader:
-                input = input.to(device)
-                target = target.to(device)
+        return self.loss.result()
 
-                output = model(input)
+    def _summary(self, train_loss, valid_loss, step):
+        self.train_summary.add_scalar('loss', train_loss, step)
+        self.valid_summary.add_scalar('loss', valid_loss, step)
 
-                loss_value = loss.update(output, target)
+    def _save(self, epoch):
+        path = os.path.join(self.checkpoint, '{}.tar'.format(epoch))
+        torch.save(
+            {'model': self.model.state_dict()},
+            path
+        )
 
-                loss_value.backward()
-                optimizer.step()
+    def run(
+        self,
+        train_loader: data.DataLoader,
+        valid_loader: data.DataLoader,
+        train_summary: SummaryWriter,
+        valid_summary: SummaryWriter,
+        model: torch.nn.Module,
+        optimizer: torch.optim.Optimizer,
+        loss: loss.Loss,
+        max_epoch: int,
+        checkpoint: str):
 
+        self.train_loader = train_loader
+        self.valid_loader = valid_loader
+        self.train_summary = train_summary
+        self.valid_summary = valid_summary
+        self.model = model
+        self.optimizer = optimizer
+        self.loss = loss
+        self.checkpoint = checkpoint
 
-            scheduler.step()
+        for epoch in range(max_epoch):
+            self.loss.reset()
 
-        # checkpoint
-
-
-
-    def run(self):
-        self._setup()
-        self._build_dataset()
-        model, optimizer, scheduler = self._build_model(None)
-        self._train_model(model, None, optimizer, scheduler, None)
+            train_loss = self._train_model()
+            valid_loss = self._valid_model()
+            self._summary(train_loss, valid_loss, epoch)
+            self._save(epoch)
