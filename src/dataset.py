@@ -5,7 +5,7 @@ class Dataset(data.Dataset):
     def __init__(self, file: str, num: int, set_type: str) -> None:
         super().__init__()
 
-    def __getitem__(self, index) -> T_co:
+    def __getitem__(self, index):
         # torch 객체로 input과 target을 반환
         return super().__getitem__(index)
 
