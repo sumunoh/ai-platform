@@ -1,4 +1,4 @@
-import paramvalidation
+from src.data import paramvalidation
 class Dataset:
     def __init__(self, dataset_type:str, path_dataset:str=None,
                        fold_size:int=5, fold_number:int=None, num_worker:int=1,random_seed:int=7777777) -> None:

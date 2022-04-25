@@ -1,5 +1,4 @@
-from ctypes import resize
-import paramvalidation
+from src.data import paramvalidation
 
 class InputLayer:
     def __init__(self, size:int):

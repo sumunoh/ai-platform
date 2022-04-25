@@ -1,5 +1,5 @@
 from abc import ABCMeta
-from constant import schedule as _schedule
+from src.data.constant import schedule as _schedule
 
 class LearningSchedule(metaclass=ABCMeta):
     def __init__(self, schedule_type: str) -> None:
