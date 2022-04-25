@@ -1,15 +1,19 @@
-import paramvalidation
+from src.data import paramvalidation
 class Dataset:
     def __init__(self, dataset_type:str, path_dataset:str=None,
                        fold_size:int=5, fold_number:int=None, num_worker:int=1,random_seed:int=7777777) -> None:
-
+        
+        ##type validate        
+        
         params = [dataset_type, path_dataset, fold_size, fold_number, num_worker, random_seed]
         param_hint = list(self.__init__.__annotations__.items())[:-1]
         for idx, param in enumerate(param_hint):
             param_name, param_type = param
             param_value = params[idx]
             paramvalidation.validate_type(param_name, param_type, param_value)
-
+            
+        #range validate
+        paramvalidation.validate_range('fold_size', fold_size, 0, 99999)
         self.dataset_type = dataset_type
         self.path_dataset=path_dataset
         self.fold_size = fold_size

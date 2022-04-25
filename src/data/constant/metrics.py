@@ -1,5 +1,5 @@
-from constant import confusion_matrix
-from constant import loss
+from src.data.constant import confusion_matrix
+from src.data.constant import loss
 
 METRICS=[getattr(confusion_matrix, item) for item in dir(confusion_matrix) if not item.startswith("__")]
 

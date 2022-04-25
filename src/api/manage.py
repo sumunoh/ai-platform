@@ -1,11 +1,9 @@
 import json
-from os import abort
 from flask import Flask, jsonify, request, make_response, Response
 from flask_restx import Api, Resource
 from flask_cors import CORS
-from responses import ApiException, OK, FALSE
-import transfer
-import metadata as _meta
+from src.api.responses import ApiException, OK, FALSE
+from src.data import transfer
 
 app = Flask(__name__)
 CORS(app)
@@ -14,7 +12,7 @@ api = Api(app)
 # error
 @app.errorhandler(404)
 def page_not_found(e):
-    return {'message':'page not found'}, 404
+    return {'message':'page not found'}, 400
 
 @app.errorhandler(ApiException)
 def handle_bad_request(e):
@@ -34,7 +32,7 @@ def final_return(response):
                     'issuccess': FALSE,
                     'error message':response.json['error_message']
                     }),
-                status = response.json['status'],
+                status = response.json['status'], 
                 mimetype = 'application/json'
         )
         
@@ -65,11 +63,6 @@ def final_return(response):
         )
         return response
 
-# index
-@app.route('/')
-def index():
-    return jsonify({"message":"Wellcome to my site"})     
-
 
 #validate-parameters
 global Metadata
@@ -80,33 +73,59 @@ class ManagementMetadata(Resource):
     def post(self, _class):
         global Metadata
         self._class = _class
-        if request.path in ['/meta/dataset', '/meta/model', '/meta/training']:
-            _json = request.get_json()
-            attr_n = 'dict_to_{}'.format(self._class)
-            get_param_method = getattr(transfer, attr_n)
-            meta_value=dict(get_param_method(_json))
-            Metadata[self._class] = meta_value
-            res=make_response(meta_value)
-            return res
-        else:
-            raise ApiException(400,'page not found',None)
+        try:
+            if request.path in ['/meta/dataset', '/meta/model', '/meta/training']:
                 
-
+                _json = request.get_json()
+                
+                if self._class =='dataset':
+                    meta_value=dict(transfer.dict_to_dataset(_json))
+                elif self._class == 'model':
+                    meta_value=dict(transfer.dict_to_model(_json))
+                elif self._class =='training':
+                    meta_value=dict(transfer.dict_to_training(_json))
+                    
+                Metadata[self._class] = meta_value
+                res=make_response(meta_value)
+                
+                return res
+            
+            else:
+                raise ApiException(400, 'page not found',None)
+            
+        except TypeError or ValueError as e:
+            
+            raise ApiException(400, str(e), None)
+            
 #start-training
 @api.route('/starttraining')
 class StartFromMetadata(Resource):
     def post(self):
-        _json = dict(request.get_json())
-        check=[]
-        for key in _json.keys():
-            if key in ['dataset','model','training']:
-                check.append(key)
-
+        try:
+            _json = dict(request.get_json())
+            check=[]
+            for key in _json.keys():
+                
+                if key in ['dataset', 'model', 'training']:
+                    check.append(key)
+                    
+                else:
+                    raise ApiException(404, 'parameter must be one of [dataset, model, training] but got {}'.format(key), None)
+                    
+                
             if len(check) == 3:
+                
                 get_param_method = getattr(transfer, 'dict_to_metadata')
                 meta_value=get_param_method(_json)
-
-        return dict(meta_value)
+                    
+            else:
+                raise ApiException(404, '3 parameters(dataset, model, training) need but got {0}'.format(len(check)), None)
+                
+            return dict(meta_value)
+        
+        except Exception as e:
+            
+            raise ApiException(400, str(e), None)
         # 
 
         #Ai Model Training Management.run()
@@ -120,8 +139,3 @@ class SendResult(Resource):
         # 모델을 찾아서  // model=model.open(id) 
         # 모델에 데이터를 넣어서 // result=model(data)
         # 출력으로 결과값을 전달한다. // return result 
-
-
-if __name__ == '__main__':
-    status = False
-    app.run(debug=True, host='0.0.0.0', port=5555)   

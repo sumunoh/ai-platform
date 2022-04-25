@@ -1,5 +1,6 @@
 from abc import ABCMeta
-from constant import schedule as _schedule
+from src.data.constant import schedule as _schedule
+from src.data import paramvalidation
 
 class LearningSchedule(metaclass=ABCMeta):
     def __init__(self, schedule_type: str) -> None:
@@ -22,6 +23,7 @@ class MulytiplySchedule(LearningSchedule):
     def __init__(self, multi: float = 0.1) -> None:
         super().__init__(_schedule.MULTIPLY)
         self._multi = multi
+        paramvalidation.validate_range('multi', multi,0,1)
 
     @property
     def multi(self):
