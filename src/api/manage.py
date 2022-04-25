@@ -101,17 +101,31 @@ class ManagementMetadata(Resource):
 @api.route('/starttraining')
 class StartFromMetadata(Resource):
     def post(self):
-        _json = dict(request.get_json())
-        check=[]
-        for key in _json.keys():
-            if key in ['dataset','model','training']:
-                check.append(key)
-
+        try:
+            _json = dict(request.get_json())
+            check=[]
+            for key in _json.keys():
+                
+                if key in ['dataset', 'model', 'training']:
+                    check.append(key)
+                    
+                else:
+                    raise ApiException(404, 'parameter must be one of [dataset, model, training] but got {}'.format(key), None)
+                    
+                
             if len(check) == 3:
+                
                 get_param_method = getattr(transfer, 'dict_to_metadata')
                 meta_value=get_param_method(_json)
-
-        return dict(meta_value)
+                    
+            else:
+                raise ApiException(404, '3 parameters(dataset, model, training) need but got {0}'.format(len(check)), None)
+                
+            return dict(meta_value)
+        
+        except Exception as e:
+            
+            raise ApiException(400, str(e), None)
         # 
 
         #Ai Model Training Management.run()

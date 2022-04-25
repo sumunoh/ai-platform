@@ -4,6 +4,7 @@ from src.data.constant import loss as _loss
 from src.data.constant import confusion_matrix as _confusion_matrix
 import src.data.earlystop as _earlystop
 from src.data import paramvalidation
+from src.data.constant.metrics import METRICS
 
 class Training:
     def __init__(self,  optimizer : str = _optimizer.ADAM, 
@@ -23,7 +24,7 @@ class Training:
         self.metrics = metrics
 
 
-        
+        #type validate
         param_hint = list(self.__init__.__annotations__.items())[:-1]
         except_params=['early_stop', 'learning_rate_schedule']
 
@@ -31,6 +32,14 @@ class Training:
             if not param_name in except_params:
                param_value=getattr(self, param_name)
                paramvalidation.validate_type(param_name, param_type, param_value)
+
+        # range validate
+        paramvalidation.validate_range('learning_rate', learning_rate,0,1)
+        paramvalidation.validate_range('max_epoch', max_epoch,0,1000)
+        
+        # mode validate
+        
+        paramvalidation.validate_mode('optimizer', optimizer, ['SGD', 'Adam', 'AdaDelta', 'AdaGrad', 'Adamax', 'Nadam', 'RMSprop'])
 
     def __iter__(self):
         
