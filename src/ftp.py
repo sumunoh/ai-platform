@@ -1,26 +1,61 @@
 #-*- coding: utf-8 -*- 
 
 import os
+import shutil
 
 class model_result:
-    def __init__(self,ID):   
-        iddir =  (os.path.abspath('/home/vsftpd/ai/model_n')) +'/{}'.format(ID)
-        print('폴더 경로:', iddir)
-        if os.path.exists(iddir):
-            print('모델 식별자 {} 폴더가 이미 존재합니다.'.format(ID))
-        else:       
-            os.mkdir(iddir)
-            print('모델 식별자 {} 폴더를 생성합니다.'.format(ID))
-            self.iddir =iddir
-            print()
-
-    def mkdir_fold(self, fold):
-        for i in range(fold):
-            folddir = os.path.dirname(os.path.abspath('{}/fold_n').format(self.iddir)) +'/fold{}/tensorboard'.format(i+1)
-            os.mkdir(folddir)
+# 모델 식별자 폴더 생성(중복성 검증)  
+   def __init__(self, id):
+      id_dir = '/home/vsftpd/ai'+'/{}'.format(id) 
+      if os.path.exists(id_dir):
+          print('모델 식별자 {} 폴더가 이미 존재합니다.'.format(id))
+      else:       
+          os.mkdir(id_dir)
+          print('모델 식별자 {} 폴더를 생성합니다.'.format(id))
+          self.id_dir = id_dir
 
 
+# 초기 폴더 생성 기능 
+   def mkdir_fold(self, fold_n):
+      for i in range(fold_n):
+        fold_dir = '{}/fold{}'.format(self.id_dir,i+1) 
+        os.mkdir(fold_dir)
+        tensorboard_dir = '{}/tensorboard'.format(fold_dir)
+        os.mkdir(tensorboard_dir)
+        epoch_dir = '{}/epoch'.format(fold_dir)
+        os.mkdir(epoch_dir)
 
 
-a = model_result(123)
-a.mkdir_fold(5)
+# metadata 파일 위치를 받아 지정된 위치에 저장
+   def cd_metadata(self, source, name):
+      root, extension = os.path.splitext(source)
+      destination = r'{}/{}{}'.format(self.id_dir, name, extension)
+      shutil.move(source,destination)
+
+
+# 학습용 데이터 텐서보드 파일 저장
+   def cd_train(self, source, fold):
+      root, extension = os.path.splitext(source)
+      destination = r'{}/fold{}/tensorboard/train{}'.format(self.id_dir,extension)
+      shutil.move(source,destination)
+
+
+# 검증용 데이터 텐서보드 파일 저장
+   def cd_valid(self, source, fold):
+      root, extension = os.path.splitext(source)
+      destination = r'{}/fold{}/tensorboard/valid{}'.format(self.id_dir,extension)
+      shutil.move(source,destination)
+
+
+# 저장된 모델 파일 위치를 받아 지정된 위치에 저장
+   def cd_epoch(self, source, fold, epoch):
+      root, extension = os.path.splitext(source)
+      destination = r'{}/fold{}/epoch/epoch{}{}'.format(self.id_dir, epoch, extension)
+      shutil.move(source,destination)
+
+
+
+
+# a = model_result(12345)
+# a.mkdir_fold(5)
+# a.cd_metadata('/home/vsftpd/abc.h5')
