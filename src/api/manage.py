@@ -93,7 +93,7 @@ class ManagementMetadata(Resource):
             else:
                 raise ApiException(400, 'page not found',None)
             
-        except TypeError or ValueError as e:
+        except Exception as e:
             
             raise ApiException(400, str(e), None)
             

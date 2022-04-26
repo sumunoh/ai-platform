@@ -35,12 +35,14 @@ class Training:
 
         # range validate
         paramvalidation.validate_range('learning_rate', learning_rate,0,1)
-        paramvalidation.validate_range('max_epoch', max_epoch,0,1000)
+        paramvalidation.validate_range_oneway('max_epoch', max_epoch,1,'down')
+        paramvalidation.validate_range_oneway('batch_size', batch_size,1,'down')
         
         # mode validate
-        
         paramvalidation.validate_mode('optimizer', optimizer, ['SGD', 'Adam', 'AdaDelta', 'AdaGrad', 'Adamax', 'Nadam', 'RMSprop'])
-
+        paramvalidation.validate_mode('metrics',metrics, METRICS)
+        
+        
     def __iter__(self):
         
         yield 'optimizer', self.optimizer
