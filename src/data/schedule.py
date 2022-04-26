@@ -22,8 +22,11 @@ class ConstantSchedule(LearningSchedule):
 class MulytiplySchedule(LearningSchedule):
     def __init__(self, multi: float = 0.1) -> None:
         super().__init__(_schedule.MULTIPLY)
-        self._multi = multi
+        #type validation
+        
         paramvalidation.validate_range('multi', multi,0,1)
+        
+        self._multi = multi
 
     @property
     def multi(self):

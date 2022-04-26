@@ -10,3 +10,12 @@ def validate_range(param_name,param_value,from_val,to_val):
 def validate_mode(param_name, param_value, _mode):
     if param_value not in _mode:   
         raise ValueError("{0} must be one of {1}, but got activation='{2}'".format(param_name, _mode, param_value))
+    
+def validate_range_oneway(param_name, param_value, from_val, how='up'):
+    
+    if how =='up':
+        if param_value > from_val:
+            raise ValueError("{0} is {1} {0} must be same or smaller than {2} but got {1}".format(param_name, param_value, from_val))
+    else:
+        if param_value < from_val:
+            raise ValueError("{0} is {1} {0} must be same or bigger than {2} but got {1}".format(param_name, param_value, from_val))

@@ -14,8 +14,8 @@ def dict_to_output_layer(data: dict):
 def dict_to_model(data: dict):
     param_dict = {"input layer":"input_layer",
                   "output layer":"output_layer",
-                  "path" :"fold_size",
-                  "layer":"fold_num",
+                  "path" :"path",
+                  "layer":"layer",
                   "path model save":"path_model_save",
                   "initializer":"initializer",
                   "name":"name",
