@@ -34,9 +34,10 @@ class Training:
                paramvalidation.validate_type(param_name, param_type, param_value)
 
         # range validate
-        paramvalidation.validate_range('learning_rate', learning_rate,0,1)
-        paramvalidation.validate_range_oneway('max_epoch', max_epoch,1,'down')
-        paramvalidation.validate_range_oneway('batch_size', batch_size,1,'down')
+        paramvalidation.validate_range_oneway('learning_rate', learning_rate, 0.0,'up') # 0.0 < learning_rate
+        paramvalidation.validate_range_oneway('learning_rate', learning_rate, 1.0,'down') # 1.0 > learning_rate
+        paramvalidation.validate_range_oneway('max_epoch', max_epoch,1,'eq_n_up') # 1 <= max epoch
+        paramvalidation.validate_range_oneway('batch_size', batch_size,1,'eq_n_up')# 1 <= batch_size
         
         # mode validate
         paramvalidation.validate_mode('optimizer', optimizer, ['SGD', 'Adam', 'AdaDelta', 'AdaGrad', 'Adamax', 'Nadam', 'RMSprop'])
