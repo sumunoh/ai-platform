@@ -3,10 +3,10 @@ from src.data import paramvalidation
 class InputLayer:
     def __init__(self, size:int): 
         #type validation
-        paramvalidation.validate_type('InputLayer',int, size)
+        paramvalidation.validate_type('InputLayer',int, size) 
         
         # range validation
-        paramvalidation.validate_range_oneway('size',size, 1, 'down')
+        paramvalidation.validate_range_oneway('size',size, 1, 'eq_n_up') # 1 <= size
         
         self.size = size
                     
@@ -18,11 +18,11 @@ class OutputLayer:
 
         #type validation
         if not isinstance(size, int) :
-                paramvalidation.validate_type('size', int, size)
+                paramvalidation.validate_type('size', int, size) 
         paramvalidation.validate_type('activation', str, activation)
                 
         # range validation
-        paramvalidation.validate_range_oneway('size',size, 1, 'down')
+        paramvalidation.validate_range_oneway('size',size, 1, 'eq_n_up') # 1 <= size
                 
         # mode validation
         valid_activation = {'sigmoid', 'ReLU', 'softmax'}

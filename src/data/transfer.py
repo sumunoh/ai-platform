@@ -23,9 +23,9 @@ def dict_to_model(data: dict):
     
     rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
     
-    rekey_data['input_layer'] = dict(dict_to_input_layer(rekey_data['input_layer']))
-    
-    rekey_data['output_layer'] = dict(dict_to_output_layer(rekey_data['output_layer']))
+    rekey_data['input_layer'] = dict_to_input_layer(rekey_data['input_layer'])
+
+    rekey_data['output_layer'] = dict_to_output_layer(rekey_data['output_layer'])
     
     return Model(**rekey_data)
     
@@ -39,7 +39,7 @@ def dict_to_dataset(data: dict):
                   "random seed":"random_seed"}
 
     rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
-
+    
     return Dataset(**rekey_data)
 
 def dict_to_earlystop(data:dict):

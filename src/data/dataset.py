@@ -5,7 +5,7 @@ class Dataset:
         
         
         #type validate        
-        params = [dataset_type, path_dataset, fold_size, fold_number, num_worker, random_seed]
+        params = [path_dataset, fold_size, fold_number, num_worker, random_seed, dataset_type]
         param_hint = list(self.__init__.__annotations__.items())[:-1]
         for idx, param in enumerate(param_hint):
             param_name, param_type = param
@@ -13,9 +13,9 @@ class Dataset:
             paramvalidation.validate_type(param_name, param_type, param_value)
             
         #range validation
-        paramvalidation.validate_range_oneway('fold_size', fold_size, 0, 'down')
-        paramvalidation.validate_range_oneway('num_worker', num_worker, 0, 'down')
-        paramvalidation.validate_range('random_seed', random_seed, -2**63, 2**64-1)
+        paramvalidation.validate_range_oneway('fold_size', fold_size, 1, 'eq_n_up') # 1 <= fold_size
+        paramvalidation.validate_range_oneway('num_worker', num_worker, 1, 'eq_n_up') # 1 <= num_worker
+        paramvalidation.validate_range('random_seed', random_seed, -2**63, 2**64-1) # same range in pytorch(manualseed)
         
         
         self.dataset_type = dataset_type
