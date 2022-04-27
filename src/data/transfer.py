@@ -30,7 +30,6 @@ def dict_to_model(data: dict):
     return Model(**rekey_data)
     
 def dict_to_dataset(data: dict):
-    #ok
     param_dict = {"dataset type":"dataset_type",
                   "path dataset":"path_dataset",
                   "fold size" :"fold_size",
@@ -47,10 +46,6 @@ def dict_to_earlystop(data:dict):
 
 def dict_to_learningrate_schedule(data:dict):
     schedule_name=data['schedule type']
-    
-    # if data != None:
-    #     m_name = '{}Schedule'.format(schedule_name)
-    # _schedule_method = getattr(_schedule, m_name)
     
     if schedule_name == 'Constant':
         return _schedule.ConstantSchedule()
