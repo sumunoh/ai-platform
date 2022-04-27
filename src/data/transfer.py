@@ -46,20 +46,20 @@ def dict_to_earlystop(data:dict):
     return MinMaxStop(data['mode'],data['monitor'],data['min delta'],data['patience'])
 
 def dict_to_learningrate_schedule(data:dict):
+    schedule_name=data['schedule type']
     
-    if data != None:
-        schedule_name=data['schedule type']
-        m_name = '{}Schedule'.format(schedule_name)
-    _schedule_method = getattr(_schedule, m_name)
+    # if data != None:
+    #     m_name = '{}Schedule'.format(schedule_name)
+    # _schedule_method = getattr(_schedule, m_name)
     
     if schedule_name == 'Constant':
-        return _schedule_method()
+        return _schedule.ConstantSchedule()
     
     elif schedule_name == 'Expotential':
-        return _schedule_method(data['x'])
+        return _schedule.ExpotentialSchedule(data['x'])
     
     else :
-        return _schedule_method(data['multi'])
+        return _schedule.MulytiplySchedule(data['multi'])
 
 def dict_to_training(data:dict):
     param_dict = {"optimizer":"optimizer",
@@ -72,8 +72,8 @@ def dict_to_training(data:dict):
                   "metrics":"metrics"}
 
     rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
-    rekey_data['early_stop']=dict(dict_to_earlystop(data['early stop']))
-    rekey_data['learning_rate_schedule']= dict(dict_to_learningrate_schedule(data['learning rate schedule']))
+    rekey_data['early_stop']=dict_to_earlystop(data['early stop'])
+    rekey_data['learning_rate_schedule']= dict_to_learningrate_schedule(data['learning rate schedule'])
     
     return Training(**rekey_data)
     

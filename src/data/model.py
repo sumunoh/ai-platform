@@ -13,7 +13,6 @@ class Model():
         self.name = name
         self.initializer =initializer
         self.gpu = gpu
-
         #type validation
         param_info = list(self.__init__.__annotations__.items())[:-1]
         for param_name, param_type in param_info:

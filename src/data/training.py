@@ -2,7 +2,7 @@ from src.data import schedule as _schedule
 from src.data.constant import optimizer as _optimizer
 from src.data.constant import loss as _loss
 from src.data.constant import confusion_matrix as _confusion_matrix
-import src.data.earlystop as _earlystop
+from src.data.earlystop import MinMaxStop
 from src.data import paramvalidation
 from src.data.constant.metrics import METRICS
 
@@ -10,8 +10,8 @@ class Training:
     def __init__(self,  optimizer : str = _optimizer.ADAM, 
                         loss:str =_loss.MEAN_SQUARED_ERROR,
                         batch_size:int = 8, learning_rate:float=0.1, 
-                        max_epoch:int=1000, early_stop:_earlystop = None,
-                        learning_rate_schedule:_schedule = None,
+                        max_epoch:int=1000, early_stop:MinMaxStop = None,
+                        learning_rate_schedule:_schedule.LearningSchedule = None,
                         metrics:str = _confusion_matrix.ACCURACY):
         
         self.optimizer = optimizer
@@ -23,13 +23,10 @@ class Training:
         self.learning_rate_schedule=learning_rate_schedule
         self.metrics = metrics
 
-
         #type validate
         param_hint = list(self.__init__.__annotations__.items())[:-1]
-        except_params=['early_stop', 'learning_rate_schedule']
 
         for param_name, param_type in param_hint:
-            if not param_name in except_params:
                param_value=getattr(self, param_name)
                paramvalidation.validate_type(param_name, param_type, param_value)
 
