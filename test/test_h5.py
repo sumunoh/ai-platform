@@ -24,7 +24,7 @@ class test_h5(unittest.TestCase):
         targets = iris_data['class']
         indexs = iris_data['index']
 
-        test_file = h5py.File('test_file.h5', 'w')
+        test_file = h5py.Fi.le('test_file.h5', 'w')
         data = test_file.create_group("data")      
         
         input = data.create_dataset("input", data = inputs)
