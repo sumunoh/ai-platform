@@ -1,5 +1,5 @@
 import unittest
-from hdf5 import HDF5
+from src.hdf5 import HDF5
 import h5py
 import pandas as pd
 from sklearn.datasets import load_iris
