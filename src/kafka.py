@@ -14,4 +14,6 @@ class Kafka:
     model["train"] ={"loss":train_loss,"metric":train_metric}
     model["valid"] ={"loss":valid_loss,"metric":valid_matric}
 
-    # print(json.dumps(model, ensure_ascii=False, indent="\t"))
+    message = json.dumps(model, ensure_ascii=False, indent="\t")
+    
+    return message
