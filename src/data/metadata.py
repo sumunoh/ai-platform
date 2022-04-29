@@ -20,9 +20,3 @@ class Metadata:
         yield 'dataset', dict(self.dataset)
         yield 'model', dict(self.model)
         yield 'training', dict(self.training)
-
-
-#부분부터 시작.
-# data.model.py
-# input_layer, output_layer에 대한 class type 검사 추가
-# initializer 범위 검사

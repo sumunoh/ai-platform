@@ -23,14 +23,13 @@ def dict_to_model(data: dict):
     
     rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
     
-    rekey_data['input_layer'] = dict(dict_to_input_layer(rekey_data['input_layer']))
-    
-    rekey_data['output_layer'] = dict(dict_to_output_layer(rekey_data['output_layer']))
+    rekey_data['input_layer'] = dict_to_input_layer(rekey_data['input_layer'])
+
+    rekey_data['output_layer'] = dict_to_output_layer(rekey_data['output_layer'])
     
     return Model(**rekey_data)
     
 def dict_to_dataset(data: dict):
-    #ok
     param_dict = {"dataset type":"dataset_type",
                   "path dataset":"path_dataset",
                   "fold size" :"fold_size",
@@ -39,27 +38,23 @@ def dict_to_dataset(data: dict):
                   "random seed":"random_seed"}
 
     rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
-
+    
     return Dataset(**rekey_data)
 
 def dict_to_earlystop(data:dict):
     return MinMaxStop(data['mode'],data['monitor'],data['min delta'],data['patience'])
 
 def dict_to_learningrate_schedule(data:dict):
-    
-    if data != None:
-        schedule_name=data['schedule type']
-        m_name = '{}Schedule'.format(schedule_name)
-    _schedule_method = getattr(_schedule, m_name)
+    schedule_name=data['schedule type']
     
     if schedule_name == 'Constant':
-        return _schedule_method()
+        return _schedule.ConstantSchedule()
     
     elif schedule_name == 'Expotential':
-        return _schedule_method(data['x'])
+        return _schedule.ExpotentialSchedule(data['x'])
     
     else :
-        return _schedule_method(data['multi'])
+        return _schedule.MulytiplySchedule(data['multi'])
 
 def dict_to_training(data:dict):
     param_dict = {"optimizer":"optimizer",
@@ -72,8 +67,8 @@ def dict_to_training(data:dict):
                   "metrics":"metrics"}
 
     rekey_data=dict((param_dict[key], value) for (key, value) in data.items())
-    rekey_data['early_stop']=dict(dict_to_earlystop(data['early stop']))
-    rekey_data['learning_rate_schedule']= dict(dict_to_learningrate_schedule(data['learning rate schedule']))
+    rekey_data['early_stop']=dict_to_earlystop(data['early stop'])
+    rekey_data['learning_rate_schedule']= dict_to_learningrate_schedule(data['learning rate schedule'])
     
     return Training(**rekey_data)
     

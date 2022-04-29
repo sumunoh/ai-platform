@@ -14,8 +14,18 @@ def validate_mode(param_name, param_value, _mode):
 def validate_range_oneway(param_name, param_value, from_val, how='up'):
     
     if how =='up':
-        if param_value > from_val:
-            raise ValueError("{0} is {1} {0} must be same or smaller than {2} but got {1}".format(param_name, param_value, from_val))
-    else:
+        if param_value <= from_val:
+            raise ValueError("{0} is {1}, {0} must be greater than {2} but got {1}".format(param_name, param_value, from_val))
+    elif how == 'down':
+        if param_value >= from_val:
+            raise ValueError("{0} is {1}, {0} must be less than {2} but got {1}".format(param_name, param_value, from_val))
+        
+    elif how == 'eq_n_up':
         if param_value < from_val:
-            raise ValueError("{0} is {1} {0} must be same or bigger than {2} but got {1}".format(param_name, param_value, from_val))
+            raise ValueError("{0} is {1}, {0} must be equal or greater than {2} but got {1}".format(param_name, param_value, from_val))
+        
+    elif how == 'eq_n_down':
+        if param_value > from_val:
+            raise ValueError("{0} is {1}, {0} must be equal or less than {2} but got {1}".format(param_name, param_value, from_val))
+    else:
+        pass
