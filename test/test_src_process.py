@@ -18,7 +18,7 @@ class XORDataset(data.Dataset):
         return self.x[index], self.y[index]
 
 class Test_TrainProcess(unittest.TestCase):
-    def test_run(self):
+    def test_trainprocess(self):
         proc = process.TrainProcess()
 
         train_dir = tempfile.TemporaryDirectory()
