@@ -14,7 +14,7 @@ class Dataset:
             
         #range validation
         paramvalidation.validate_range_oneway('fold_size', fold_size, 1, 'eq_n_up') 
-        paramvalidation.validate_range_oneway('num_worker', num_worker, 1, 'eq_n_up')
+        paramvalidation.validate_range_oneway('num_worker', num_worker, 0, 'eq_n_up')
         paramvalidation.validate_range('random_seed', random_seed, -2**63, 2**64-1)
         
         
