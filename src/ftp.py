@@ -13,21 +13,21 @@ class FTP:
         self.ftp.connect(host=self.ip, port=self.port)
         self.ftp.login(user=self.id, passwd=self.pwd)
         
-        parent_dir = '/{}'.format(self.uniq_id)
-        self.ftp.mkd('{}'.format(parent_dir))
-        self.parent_dir = parent_dir
 
 
     def mkdir_fold(self, fold_n:int):
-      for i in range(fold_n):
-        fold_dir = '{}/fold{}'.format(self.parent_dir,i+1) 
-        self.ftp.mkd(fold_dir)
-        tensorboard_dir = '{}/tensorboard'.format(fold_dir)
-        self.ftp.mkd(tensorboard_dir)
-        epoch_dir = '{}/epoch'.format(fold_dir)
-        self.ftp.mkd(epoch_dir)
+        parent_dir = '/{}'.format(self.uniq_id)
+        self.ftp.mkd('{}'.format(parent_dir))
+        
+        for i in range(fold_n):
+            fold_dir = '{}/fold{}'.format(parent_dir,i+1) 
+            self.ftp.mkd(fold_dir)
+            tensorboard_dir = '{}/tensorboard'.format(fold_dir)
+            self.ftp.mkd(tensorboard_dir)
+            epoch_dir = '{}/epoch'.format(fold_dir)
+            self.ftp.mkd(epoch_dir)
 
-    
+        
     # metadata 파일 위치를 받아 지정된 위치에 저장
     def save_metadata(self, source: str):              
         self.ftp.cwd('/{}'.format(self.uniq_id))
@@ -69,7 +69,7 @@ class FTP:
 
 # f = FTP(1234, '10.1.1.65', 3021, 'ai', 'meta1234')
 # f.mkdir_fold(5)
-# f.save_metadata('/dev/work/ai-platform-1/src/test1.csv')
-# f.save_TensorboardTrain('/dev/work/ai-platform-1/src/test2.csv', 3)
-# f.save_TensorboardValid('/dev/work/ai-platform-1/src/test1.csv', 3)
-# f.save_epoch('/dev/work/ai-platform-1/src/test1.csv', 3, 3)
+# f.save_metadata('test_file.txt')
+# f.save_TensorboardTrain('test_file.txt', 3)
+# f.save_TensorboardValid('test_file.txt', 3)
+# f.save_epoch('test_file.txt', 3, 3)
