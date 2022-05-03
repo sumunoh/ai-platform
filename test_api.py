@@ -13,7 +13,7 @@ class ApiTests(unittest.TestCase):
         
         #right_parameters 
         self.data_dataset = {"dataset type":'h5',"path dataset":"./data_dir",
-                            "fold size":1, "fold number":None, "num worker":1,"random seed":1
+                            "fold size":1, "fold number":1, "num worker":1,"random seed":1
                         }
 
         self.data_model ={'input layer':{'size':10}, 'output layer':{'size':10, 'activation':'softmax'},
@@ -24,6 +24,33 @@ class ApiTests(unittest.TestCase):
                     'metrics':'accuracy'}
 
         #wrong_parameters
+    
+    # def metadata 파라미터 정의()
+    # def metadata 타입 검사()
+    # def metadata 범위 검사()
+    # def metadata 모드 검사()
+    # def metadata 필수 검사()
+    
+    
+    # def dataset 파라미터 정의()
+    # def dataset 타입 검사()
+    # def dataset 범위 검사()
+    # def metadata 모드 검사()
+    # def dataset 필수 검사()
+    
+    # def model 파라미터 정의()
+    # def model 타입 검사()
+    # def model 범위 검사()
+    # def metadata 모드 검사()
+    # def model 필수 검사()
+    
+    
+    # def training 파라미터 정의()
+    # def training 타입 검사
+    # def training 범위 검사
+    # def metadata 모드 검사
+    # def training 필수 검사
+    
     
     def test_right_dataset_param(self):
         """dataset_param 판별하는 테스트 메소드"""
