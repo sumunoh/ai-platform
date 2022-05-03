@@ -63,7 +63,6 @@ def final_return(response):
         )
         return response
 
-
 #validate-parameters
 global Metadata
 Metadata={}
@@ -126,9 +125,8 @@ class StartFromMetadata(Resource):
         except Exception as e:
             
             raise ApiException(400, str(e), None)
-        # 
-
         #Ai Model Training Management.run()
+        
 # inference
 @api.route('/result')
 class SendResult(Resource):

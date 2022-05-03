@@ -13,6 +13,7 @@ class Model():
         self.name = name
         self.initializer =initializer
         self.gpu = gpu
+        
         #type validation
         param_info = list(self.__init__.__annotations__.items())[:-1]
         for param_name, param_type in param_info:
@@ -22,7 +23,8 @@ class Model():
         #mode validation
         paramvalidation.validate_mode('initializer', initializer, ['random normal','random uniform','zero','one'])
         
-        
+        # range validation
+        paramvalidation.validate_range('gpu', gpu,0,1)
 
 
 
@@ -35,15 +37,3 @@ class Model():
         yield 'name', self.name
         yield 'initializer',self.initializer
         yield 'gpu', self.gpu        
-        
-        
-
-        
-        
-# class NetPath(Model):
-#     def __init__(self):
-#         pass
-    
-# class NetWork(Model):
-#     def __init__(self):
-#         pass

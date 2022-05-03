@@ -13,14 +13,14 @@ class MinMaxStop:
         
         
         # range validation
-        paramvalidation.validate_range_oneway('patience', patience, 1, 'eq_n_up') # 1 <= patience
-        paramvalidation.validate_range_oneway('min_delta', min_delta, 0.0, 'up') # 0.0 < min_delta
+        paramvalidation.validate_range_oneway('patience', patience, 1, 'eq_n_up')
+        paramvalidation.validate_range_oneway('min_delta', min_delta, 0.0, 'up')
         
         
         # mode validation
         valid_mode={'min','max'}
-        paramvalidation.validate_mode('mode',mode, valid_mode)
-        paramvalidation.validate_mode('monitor',monitor, METRICS)
+        paramvalidation.validate_mode('mode', mode, valid_mode)
+        paramvalidation.validate_mode('monitor', monitor, METRICS)
 
         self.mode =mode
         self.monitor = monitor

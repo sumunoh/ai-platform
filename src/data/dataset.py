@@ -13,9 +13,9 @@ class Dataset:
             paramvalidation.validate_type(param_name, param_type, param_value)
             
         #range validation
-        paramvalidation.validate_range_oneway('fold_size', fold_size, 1, 'eq_n_up') # 1 <= fold_size
-        paramvalidation.validate_range_oneway('num_worker', num_worker, 1, 'eq_n_up') # 1 <= num_worker
-        paramvalidation.validate_range('random_seed', random_seed, -2**63, 2**64-1) # same range in pytorch(manualseed)
+        paramvalidation.validate_range_oneway('fold_size', fold_size, 1, 'eq_n_up') 
+        paramvalidation.validate_range_oneway('num_worker', num_worker, 0, 'eq_n_up')
+        paramvalidation.validate_range('random_seed', random_seed, -2**63, 2**64-1)
         
         
         self.dataset_type = dataset_type
