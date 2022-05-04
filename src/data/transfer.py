@@ -2,7 +2,11 @@ from src.data.model import Model, InputLayer, OutputLayer
 from src.data.dataset import Dataset
 from src.data.training import Training
 from src.data.earlystop import MinMaxStop
+<<<<<<< HEAD
 from src.data import schedule as _schedule
+=======
+import src.data.schedule as _schedule
+>>>>>>> bb9976c6ace1e0eb392c0e815447973ecc08a7e0
 from src.data.metadata import Metadata
 
 def dict_to_input_layer(data: dict):
