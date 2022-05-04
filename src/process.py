@@ -4,6 +4,8 @@ from src import dataset
 from torch.utils import data
 import torch
 import os
+from src.data import metadata
+from src import transfer
 from torch.utils.tensorboard import SummaryWriter
 
 class TrainProcess:
@@ -85,3 +87,12 @@ class TrainProcess:
             valid_loss = self._valid_model()
             self._summary(train_loss, valid_loss, epoch)
             self._save(epoch)
+
+class MetaTrainProcess(TrainProcess):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def run(self, meta: metadata.Metadata):
+        train_loader = transfer.dataset_to_dataloader(meta.dataset, meta.training)
+
+        super().run()
