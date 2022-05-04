@@ -13,8 +13,8 @@ class Dataset:
             paramvalidation.validate_type(param_name, param_type, param_value)
             
         #range validation
-        paramvalidation.validate_range_oneway('fold_size', fold_size, 1, 'eq_n_up') 
-        paramvalidation.validate_range_oneway('num_worker', num_worker, 0, 'eq_n_up')
+        paramvalidation.validate_eq_n_greater('fold_size', fold_size, 1) 
+        paramvalidation.validate_eq_n_greater('num_worker', num_worker, 0)
         paramvalidation.validate_range('random_seed', random_seed, -2**63, 2**64-1)
         
         

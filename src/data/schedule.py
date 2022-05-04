@@ -24,7 +24,7 @@ class MulytiplySchedule(LearningSchedule):
         super().__init__(_schedule.MULTIPLY)
         #type validation
         
-        paramvalidation.validate_range('multi', multi,0,1) # 0<multi<1 float
+        paramvalidation.validate_range('multi', multi,0,1)
         
         self._multi = multi
 

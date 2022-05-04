@@ -6,7 +6,7 @@ class InputLayer:
         paramvalidation.validate_type('InputLayer',int, size) 
         
         # range validation
-        paramvalidation.validate_range_oneway('size',size, 1, 'eq_n_up')
+        paramvalidation.validate_eq_n_greater('size',size, 1) 
         
         self.size = size
                     
@@ -22,7 +22,7 @@ class OutputLayer:
         paramvalidation.validate_type('activation', str, activation)
                 
         # range validation
-        paramvalidation.validate_range_oneway('size',size, 1, 'eq_n_up')
+        paramvalidation.validate_eq_n_greater('size',size, 1)
                 
         # mode validation
         valid_activation = {'sigmoid', 'ReLU', 'softmax'}
