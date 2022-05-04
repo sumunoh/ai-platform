@@ -1,6 +1,8 @@
 import unittest
-from src.ftp import FTP
+# import sys 
+# sys.path.insert(0, '../src')
 
+from src.ftp import FTP
 #-*- coding: utf-8 -*- 
 import ftplib
 import os

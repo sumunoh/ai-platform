@@ -1,4 +1,7 @@
 import unittest
+# import sys 
+# sys.path.insert(0, '../src')
+
 from src.hdf5 import HDF5
 import h5py
 import pandas as pd
@@ -121,7 +124,7 @@ class test_h5(unittest.TestCase):
 
     def test_load_input(self):
         h5 = HDF5('test_file.h5')
-        a = h5.load_input(1, 1)
+        a = h5.load_input(1)
         
         filename ='test_file.h5'
         hdf = h5py.File(filename, 'r') 
@@ -133,7 +136,7 @@ class test_h5(unittest.TestCase):
 
     def test_load_target(self):
         h5 = HDF5('test_file.h5')
-        a = h5.load_target(1, 1)
+        a = h5.load_target(1)
         
         filename ='test_file.h5'
         hdf = h5py.File(filename, 'r') 

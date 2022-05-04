@@ -1,4 +1,8 @@
 import unittest
+
+# import sys
+# sys.path.insert(0, '../src')
+
 from src.kafka import Kafka
 import json
 from collections import OrderedDict
@@ -24,3 +28,4 @@ class test_kafka(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
