@@ -1,6 +1,6 @@
-import dataset as _dataset
-import model as _model
-import training as _training
+from src.data import dataset as _dataset
+from src.data import model as _model
+from src.data import training as _training
 
 class Metadata:
     def __init__(self, dataset, model, training) -> None:

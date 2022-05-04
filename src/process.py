@@ -6,6 +6,7 @@ import torch
 import os
 from src.data import metadata
 from src import transfer
+import tempfile
 from torch.utils.tensorboard import SummaryWriter
 
 class TrainProcess:
@@ -92,7 +93,38 @@ class MetaTrainProcess(TrainProcess):
     def __init__(self) -> None:
         super().__init__()
 
-    def run(self, meta: metadata.Metadata):
-        train_loader = transfer.dataset_to_dataloader(meta.dataset, meta.training)
+    def _tempModel(self):
+        model = torch.nn.Sequential(
+            torch.nn.Linear(2, 10),
+            torch.nn.Sigmoid(),
+            torch.nn.Linear(10, 10),
+            torch.nn.Sigmoid(),
+            torch.nn.Linear(10, 10),
+            torch.nn.Sigmoid(),
+            torch.nn.Linear(10, 1),
+            torch.nn.Sigmoid()
+        )
+        return model
 
-        super().run()
+    def run(self, meta: metadata.Metadata):
+        train_loader, valid_loader = transfer.dataset_to_dataloader(meta.dataset, meta.training, '')
+        train_dir = tempfile.TemporaryDirectory()
+        valid_dir = tempfile.TemporaryDirectory()
+        train_summary = SummaryWriter(train_dir.name)
+        valid_summary = SummaryWriter(valid_dir.name)
+        model = self._tempModel()
+        optimizer = transfer.meta_to_optimizer(model.parameters(), meta.training)
+        loss = transfer.meta_to_loss(meta.training)
+        checkpoint = tempfile.TemporaryDirectory()
+
+        super().run(
+            train_loader=train_loader,
+            valid_loader=valid_loader,
+            train_summary=train_summary,
+            valid_summary=valid_summary,
+            model=model,
+            optimizer=optimizer,
+            loss=loss,
+            max_epoch=meta.training.max_epoch,
+            checkpoint=checkpoint.name
+        )

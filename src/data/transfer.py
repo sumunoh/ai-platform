@@ -1,9 +1,9 @@
-from model import Model, InputLayer, OutputLayer
-from dataset import Dataset
-from training import Training
-from earlystop import MinMaxStop
-import schedule as _schedule
-from metadata import Metadata
+from src.data.model import Model, InputLayer, OutputLayer
+from src.data.dataset import Dataset
+from src.data.training import Training
+from src.data.earlystop import MinMaxStop
+import src.data.schedule as _schedule
+from src.data.metadata import Metadata
 
 def dict_to_input_layer(data: dict):
     return InputLayer(data['size'])

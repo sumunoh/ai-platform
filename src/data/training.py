@@ -1,9 +1,9 @@
-import schedule as _schedule
-from constant import optimizer as _optimizer
-from constant import loss as _loss
-from constant import confusion_matrix as _confusion_matrix
-import earlystop as _earlystop
-import paramvalidation
+from src.data import schedule as _schedule
+from src.data.constant import optimizer as _optimizer
+from src.data.constant import loss as _loss
+from src.data.constant import confusion_matrix as _confusion_matrix
+from src.data import earlystop as _earlystop
+from src.data import paramvalidation
 
 class Training:
     def __init__(self,  optimizer : str = _optimizer.ADAM, 

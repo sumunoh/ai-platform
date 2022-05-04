@@ -1,5 +1,5 @@
-import paramvalidation
-from layer import InputLayer, OutputLayer
+from src.data import paramvalidation
+from src.data.layer import InputLayer, OutputLayer
 class Model():
     # path
     # layer 추가필요

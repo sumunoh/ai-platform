@@ -1,4 +1,4 @@
-from responses import ApiException
+from src.data.responses import ApiException
 
 def validate_type(param_name,param_type,param_value):
     if param_value != None :
