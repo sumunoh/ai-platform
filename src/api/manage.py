@@ -6,6 +6,7 @@ from src.api.responses import ApiException, OK, FALSE
 from src.data import transfer
 
 app = Flask(__name__)
+APP=app
 CORS(app)
 api = Api(app)
 
