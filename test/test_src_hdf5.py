@@ -1,24 +1,14 @@
 import unittest
-# import sys 
-# sys.path.insert(0, '../src')
-
-from src.hdf5 import HDF5
+from src import hdf5
 import h5py
 import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import ShuffleSplit
-import datetime as dt
 import numpy as np
 import os
 
-
-class test_h5(unittest.TestCase):
-
-
-
+class HDF5(unittest.TestCase):
     def setUp(self):
-        """테스트 시작되기 전 파일 작성"""
-
         iris = load_iris() 
         iris_data = pd.DataFrame(iris.data, columns=iris.feature_names)
         inputs=iris_data.copy()
@@ -57,10 +47,9 @@ class test_h5(unittest.TestCase):
             globals() ['test'] = index[j].create_dataset('test', data = test[i])
 
         test_file.close()
-   
 
     def test_load_data_input(self):
-        h5 = HDF5('test_file.h5')
+        h5 = hdf5.HDF5('test_file.h5')
         a = h5.load_data('input')
 
         filename ='test_file.h5'
@@ -70,9 +59,8 @@ class test_h5(unittest.TestCase):
 
         self.assertEqual(a.any(),b.any())
 
-
     def test_load_data_target(self):
-        h5 = HDF5('test_file.h5')
+        h5 = hdf5.HDF5('test_file.h5')
         a = h5.load_data('target')
 
         filename ='test_file.h5'
@@ -82,10 +70,29 @@ class test_h5(unittest.TestCase):
 
         self.assertEqual(a.any(),b.any())
 
+    def test_load_data_data_error(self):
+        h5 = hdf5.HDF5('test_file.h5')
 
+        # type error
+        error = None
+        try:
+            h5.load_data(1)
+        except TypeError as e:
+            error = e
+
+        self.assertIsInstance(error, TypeError)
+
+        # value error
+        error = None
+        try:
+            h5.load_data('asdf')
+        except ValueError as e:
+            error = e
+
+        self.assertIsInstance(error, ValueError)
 
     def test_load_index_train(self):
-        h5 = HDF5('test_file.h5')
+        h5 = hdf5.HDF5('test_file.h5')
         a = h5.load_index(1, 'train')
 
         filename ='test_file.h5'
@@ -95,10 +102,8 @@ class test_h5(unittest.TestCase):
 
         self.assertEqual(a.any(),b.any())
 
-
-
     def test_load_index_valid(self):
-        h5 = HDF5('test_file.h5')
+        h5 = hdf5.HDF5('test_file.h5')
         a = h5.load_index(1, 'valid')
 
         filename ='test_file.h5'
@@ -108,10 +113,8 @@ class test_h5(unittest.TestCase):
 
         self.assertEqual(a.any(),b.any())
 
-
-
     def test_load_index_test(self):
-        h5 = HDF5('test_file.h5')
+        h5 = hdf5.HDF5('test_file.h5')
         a = h5.load_index(1, 'test')
 
         filename ='test_file.h5'
@@ -121,9 +124,54 @@ class test_h5(unittest.TestCase):
 
         self.assertEqual(a.any(),b.any())
 
+    def test_load_index_fold_error(self):
+        h5 = hdf5.HDF5('test_file.h5')
+
+        # type error
+        error = None
+        try:
+            h5.load_index(0.1, 'train')
+        except TypeError as e:
+            error = e
+        self.assertIsInstance(error, TypeError)
+
+        # under error
+        error = None
+        try:
+            h5.load_index(0, 'train')
+        except ValueError as e:
+            error = e
+        self.assertIsInstance(error, ValueError)
+
+        # over error
+        error = None
+        try:
+            h5.load_index(6, 'train')
+        except ValueError as e:
+            error = e
+        self.assertIsInstance(error, ValueError)
+
+    def test_load_index_dataset_error(self):
+        h5 = hdf5.HDF5('test_file.h5')
+
+        # type error
+        error = None
+        try:
+            h5.load_index(1, 1)
+        except TypeError as e:
+            error = e
+        self.assertIsInstance(error, TypeError)
+
+        # value error
+        error = None
+        try:
+            h5.load_index(1, 'asdf')
+        except ValueError as e:
+            error = e
+        self.assertIsInstance(error, ValueError)
 
     def test_load_input(self):
-        h5 = HDF5('test_file.h5')
+        h5 = hdf5.HDF5('test_file.h5')
         a = h5.load_input(1)
         
         filename ='test_file.h5'
@@ -133,9 +181,28 @@ class test_h5(unittest.TestCase):
 
         self.assertEqual(a.any(),b.any())
 
+    def test_load_input_index_error(self):
+        h5 = hdf5.HDF5('test_file.h5')
+
+        # type error
+        error = None
+        try:
+            h5.load_input(0.1)
+        except TypeError as e:
+            error = e
+        self.assertIsInstance(error, TypeError)
+
+        # value error
+        error = None
+        try:
+            h5.load_input(-1)
+        except ValueError as e:
+            error = e
+        self.assertIsInstance(error, ValueError)
+
 
     def test_load_target(self):
-        h5 = HDF5('test_file.h5')
+        h5 = hdf5.HDF5('test_file.h5')
         a = h5.load_target(1)
         
         filename ='test_file.h5'
@@ -145,6 +212,24 @@ class test_h5(unittest.TestCase):
 
         self.assertEqual(a.any(),b.any())
 
+    def test_load_target_index_error(self):
+        h5 = hdf5.HDF5('test_file.h5')
+
+        # type error
+        error = None
+        try:
+            h5.load_target(0.1)
+        except TypeError as e:
+            error = e
+        self.assertIsInstance(error, TypeError)
+
+        # value error
+        error = None
+        try:
+            h5.load_target(-1)
+        except ValueError as e:
+            error = e
+        self.assertIsInstance(error, ValueError)
 
     def tearDown(self):
         """테스트 종료 후 파일 삭제 """
@@ -152,6 +237,3 @@ class test_h5(unittest.TestCase):
             os.remove("test_file.h5")
         except:
             pass
-
-if __name__ == '__main__':
-    unittest.main()
