@@ -14,7 +14,7 @@ class FTP:
         exception.validate_type('port', port, int)
         exception.validate_eq_greater('port', port, 0)
 
-        exception.validate_type('id'. id, str)
+        exception.validate_type('id', id, str)
 
         exception.validate_type('pwd', pwd, str)
         
@@ -26,21 +26,31 @@ class FTP:
         self.ftp = ftplib.FTP()
         self.ftp.connect(host=self.ip, port=self.port)
         self.ftp.login(user=self.id, passwd=self.pwd)
+
+    def _exist(self, name: str, root = ''):
+        if os.path.join(root, name) in self.ftp.nlst(root):
+            return True
+        return False
+
         
     def mkdir_fold(self, fold:int):
         exception.validate_type('fold', fold, int)
         exception.validate_eq_greater('fold', fold, 1)
 
-        parent_dir = '/{}'.format(self.model_id)
-        self.ftp.mkd('{}'.format(parent_dir))
+        if not self._exist('{}'.format(self.model_id)):
+            self.ftp.mkd('{}'.format(self.model_id))
 
         for i in range(fold):
-            fold_dir = '{}/fold{}'.format(parent_dir,i+1) 
-            self.ftp.mkd(fold_dir)
-            tensorboard_dir = '{}/tensorboard'.format(fold_dir)
-            self.ftp.mkd(tensorboard_dir)
-            epoch_dir = '{}/epoch'.format(fold_dir)
-            self.ftp.mkd(epoch_dir)
+            root = '{}'.format(self.model_id)
+            if not self._exist('fold{}'.format(i + 1), root):
+                self.ftp.mkd(os.path.join(root, 'fold{}'.format(i+1)))
+
+            root = os.path.join(root, 'fold{}'.format(i + 1))
+            if not self._exist('tensorboard', root):
+                self.ftp.mkd(os.path.join(root, 'tensorboard'))
+            
+            if not self._exist('epoch', root):
+                self.ftp.mkd(os.path.join(root, 'epoch'))    
         
     def save_metadata(self, source: str):
         exception.validate_type('source', source, str)
@@ -54,11 +64,13 @@ class FTP:
     def save_tensorboard_train(self, source: str, fold: int):
         exception.validate_type('source', source, str)
         
-        exception.validate_type('fold'. fold, int)
+        exception.validate_type('fold', fold, int)
         exception.validate_eq_greater('fold', fold, 1)
         fold_list = self.ftp.nlst('/{}'.format(self.model_id))
+        print(fold_list)
         regex = re.compile('(\d+)(?!.*\d)')
         max_fold = int(regex.findall(fold_list[-1])[0])
+        print(max_fold)
         exception.validate_eq_less('fold', fold, max_fold)
 
         self.ftp.cwd('/{}/fold{}/tensorboard'.format(self.model_id, fold))
@@ -70,7 +82,7 @@ class FTP:
     def save_tensorboard_valid(self, source: str, fold: int):
         exception.validate_type('source', source, str)
         
-        exception.validate_type('fold'. fold, int)
+        exception.validate_type('fold', fold, int)
         exception.validate_eq_greater('fold', fold, 1)
         fold_list = self.ftp.nlst('/{}'.format(self.model_id))
         regex = re.compile('(\d+)(?!.*\d)')
@@ -86,7 +98,7 @@ class FTP:
     def save_epoch(self, source: str, fold: int, epoch: int):
         exception.validate_type('source', source, str)
         
-        exception.validate_type('fold'. fold, int)
+        exception.validate_type('fold', fold, int)
         exception.validate_eq_greater('fold', fold, 1)
         fold_list = self.ftp.nlst('/{}'.format(self.model_id))
         regex = re.compile('(\d+)(?!.*\d)')
@@ -99,5 +111,5 @@ class FTP:
         self.ftp.cwd('/{}/fold{}/epoch'.format(self.model_id, fold))
         root, extension = os.path.splitext(source)    
         upload_file = open(source, 'rb')    
-        self.ftp.storbinary('STOR epoch{}{}'.format(epoch,extension), upload_file)
+        self.ftp.storbinary('STOR epoch_{}{}'.format(epoch,extension), upload_file)
         upload_file.close()

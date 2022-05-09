@@ -1,6 +1,7 @@
 src/__pycache__
 src/data/__pycache__
 src/data/constant/__pycache__
+src/api/__pycache__
 test/__pycache__
 *.pyc
 .vscode
