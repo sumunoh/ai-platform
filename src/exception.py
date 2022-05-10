@@ -14,7 +14,7 @@ def validate_type(name: str, param, param_type, exception = 'general'):
         p = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
         ip_valid = re.search(p, param)
         if ip_valid is None:
-            raise TypeError("ip regular expresstion is xxx.xxx.xxx.xxx")
+            raise TypeError("ip regular expression is xxx.xxx.xxx.xxx")
     else:
         pass    
 
