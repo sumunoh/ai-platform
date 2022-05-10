@@ -5,3 +5,5 @@ src/api/__pycache__
 test/__pycache__
 *.pyc
 .vscode
+src/sumun.py
+src/iris.h5
