@@ -1,4 +1,4 @@
 from decimal import DivisionUndefined
 
 
-DivisionUndefined
+DivisionUndefinedsssss
